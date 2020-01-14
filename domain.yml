@@ -1,0 +1,63 @@
+intents:
+  - greet
+  - company
+  - fleet_size
+  - goodbye
+  - affirm
+  - deny
+  - mood_great
+  - mood_unhappy
+  - bot_challenge
+
+actions:
+- utter_greet
+- utter_did_that_help
+- utter_happy
+- utter_goodbye
+- utter_company
+- action_fleet_size
+- action_truck_ids
+- utter_brand
+- utter_model
+- utter_engine
+- utter_axl_nr
+- utter_weight
+- utter_max_load
+
+templates:
+  utter_greet:
+  - text: "Hey!"
+
+  utter_did_that_help:
+  - text: "Did that help you?"
+
+  utter_happy:
+  - text: "Great! Let's move on"
+
+  utter_goodbye:
+  - text: "Bye"
+
+  utter_company:
+  - text: "What's the name of the company you represent?"
+
+  utter_brand:
+  - text: "What's the brand of the truck?"
+
+  utter_model:
+  - text: "What's the model of the truck?"
+
+  utter_engine:
+  - text: "What's the engine size of the truck?"
+
+  utter_axl_nr:
+  - text: "How many axles has the truck?"
+
+  utter_weight:
+  - text: "What's truck's weight?"
+
+  utter_max_load:
+  - text: "What's the max load of the truck?"
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true
