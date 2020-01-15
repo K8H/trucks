@@ -1,7 +1,10 @@
 intents:
+  - request_truck:
+      use_entities: []
   - greet
-  - company
-  - fleet_size
+  - response_company
+  - inform
+  - thankyou
   - goodbye
   - affirm
   - deny
@@ -9,22 +12,97 @@ intents:
   - mood_unhappy
   - bot_challenge
 
+entities:
+  - truck_id
+  - brand
+  - model
+  - engine_size
+  - axl_nr
+  - weight
+  - max_load
+
+slots:
+  truck_id:
+    type: unfeaturized
+    auto_fill: false
+  brand:
+    type: unfeaturized
+    auto_fill: false
+  model:
+    type: unfeaturized
+    auto_fill: false
+  engine_size:
+    type: unfeaturized
+    auto_fill: false
+  axl_nr:
+    type: unfeaturized
+    auto_fill: false
+  weight:
+    type: unfeaturized
+    auto_fill: false
+  max_load:
+    type: unfeaturized
+    auto_fill: false
+
 actions:
-- utter_greet
-- utter_did_that_help
-- utter_happy
-- utter_goodbye
-- utter_company
-- action_fleet_size
-- action_truck_ids
-- utter_brand
-- utter_model
-- utter_engine
-- utter_axl_nr
-- utter_weight
-- utter_max_load
+  - utter_company
+  - utter_slots_values
+  - utter_noworries
+  - utter_chitchat
+  - utter_ask_continue
+  - utter_greet
+  - utter_iamabot
+
+forms:
+  - truck_form
 
 templates:
+  utter_ask_truck_id:
+    - text: "What's the id of the truck?"
+
+  utter_ask_brand:
+    - text: "What's the brand of the truck?"
+
+  utter_wrong_brand:
+    - text: "Brand can not be found on the list, please try again"
+
+  utter_ask_model:
+    - text: "What's the model of the truck?"
+
+  utter_ask_engine_size:
+    - text: "What's the size of truck's engine?"
+
+  utter_wrong_engine_size:
+    - text: "Engine size should be in a range [3000, 15000]"
+
+  utter_ask_axl_nr:
+    - text: "How many axles has the truck?"
+
+  utter_wrong_axl_nr:
+    - text: "Number of axles should be in a range [1, 5]"
+
+  utter_ask_weight:
+    - text: "How much does the truck weight?"
+
+  utter_wrong_weight:
+    - text: "Weight should be in a range [5000, 33000]"
+
+  utter_ask_max_load:
+    - text: "What's the max load of the truck?"
+
+  utter_wrong_max_load:
+    - text: "Max load should be in a range [1000, 20000]"
+
+  utter_slots_values:
+    - text: "I added to the record file a truck with specifications:\n
+               - truck id: {truck_id}\n
+               - brand: {brand}\n
+               - model: {model}\n
+               - engine_size: {engine_size}\n
+               - axl_nr: {axl_nr}
+               - weight: {weight}\n
+               - max_load: {max_load}\n"
+
   utter_greet:
   - text: "Hey!"
 
@@ -40,23 +118,8 @@ templates:
   utter_company:
   - text: "What's the name of the company you represent?"
 
-  utter_brand:
-  - text: "What's the brand of the truck?"
-
-  utter_model:
-  - text: "What's the model of the truck?"
-
-  utter_engine:
-  - text: "What's the engine size of the truck?"
-
-  utter_axl_nr:
-  - text: "How many axles has the truck?"
-
-  utter_weight:
-  - text: "What's truck's weight?"
-
-  utter_max_load:
-  - text: "What's the max load of the truck?"
+  utter_noworries:
+    - text:
 
 session_config:
   session_expiration_time: 60

@@ -1,11 +1,15 @@
-# Configuration for Rasa NLU.
-# https://rasa.com/docs/rasa/nlu/components/
 language: en
-pipeline: supervised_embeddings
 
-# Configuration for Rasa Core.
-# https://rasa.com/docs/rasa/core/policies/
+pipeline:
+  - name: WhitespaceTokenizer
+  - name: CRFEntityExtractor
+  - name: EntitySynonymMapper
+  - name: CountVectorsFeaturizer
+    token_pattern: (?u)\b\w+\b
+  - name: EmbeddingIntentClassifier
+
 policies:
+  - name: FallbackPolicy
   - name: MemoizationPolicy
-  - name: KerasPolicy
+  - name: FormPolicy
   - name: MappingPolicy

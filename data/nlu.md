@@ -1,66 +1,152 @@
 ## intent:greet
+- Hi
+- Hey
+- Hi bot
+- Hey bot
+- Hello
+- Good morning
+- hi again
+- hi folks
+- hi Mister
+- hi pal!
+- hi there
+- greetings
+- hello everybody
+- hello is anybody there
+- hello robot
+- hallo
+- heeey
+- hi hi
 - hey
-- hello
+- hey hey
+- hello there
 - hi
-- good morning
-- good evening
-- hey there
+- hello
+- yo
+- hola
+- hi?
+- hey bot!
+- hello friend
 
-## intent:company
-- MAN
-- Scania
-- Iveco
-- Volvo
-- Daimler
+## intent:response_company
+- a company
+- company 1
+- some company
+- co & co
+- a comp
 
-## regex:fleet_size
-- \b\d{2}\b
+## intent:inform
+- [3](truck_id)
+- [568](truck_id)
+- [1900765](truck_id)
+- [MAN](brand)
+- [Scania](brand)
+- [Iveco](brand)
+- [Volvo](brand)
+- [Daimler](brand)
+- [MAN 3200](model)
+- [Scania 142H](model)
+- [Mercedes-Benz Actros 2014](model)
+- [6200](engine_size)
+- [8200](engine_size)
+- [7400](engine_size)
+- [1](axl_nr)
+- [2](axl_nr)
+- [3](axl_nr)
+- [4](axl_nr)
+- [5](axl_nr)
+- [20000](weight)
+- [6000](weight)
+- [10000](weight)
+- [15000](weight)
+- [25000](weight)
+- [30000](weight)
+- [15000](max_load)
+- [8000](max_load)
+- [12000](max_load)
+- [17000](max_load)
+
+## intent:affirm
+- correct
+- ye
+- uh yes
+- let's do it
+- yeah
+- uh yes
+- um yes
+- yes knocking
+- that's correct
+- yes yes
+- right
+- yea
+- yes
+- yes right
+- yes and i dont care
+- right on
+- i love that
+
+## intent:deny
+- no
+- no new selection
+- no thanks
+- no thank you
+- uh no
+- breath no
+- do you have something else
+- no this does not work for me
+
+## intent:thankyou
+- um thank you good bye
+- okay cool uh good bye thank you
+- okay thank you good bye
+- you rock
+- and thats all thank you and good bye
+- thank you and good bye
+- sorry about my mistakes thank you good bye
+- noise thank you good bye
+- thank you goodbye noise
+- okay thank you goodbye
+- uh thank you good bye
+- thank you goodbye
+- thank you goodbye noise thank you goodbye
+- breath thank you goodbye
+- thank you
+- okay thank you
+- thanks goodbye
+- ah thank you goodbye
+- thank you noise
+- thank you good bye
+- breath thank you very much goodbye
+- thanks
+- noise thank you goodbye
+- unintelligible thank you goodbye
+- uh okay thank you good bye
+- thank you bye
+- um okay thank you good bye
+
+## intent:stop
+- ok then you cant help me
+- that was shit, you're not helping
+- you can't help me
+- you can't help me with what i need
+- i guess you can't help me then
+- ok i guess you can't help me
+- that's not what i want
+- ok, but that doesnt help me
+- this is leading to nothing
+- this conversation is not really helpful
+- you cannot help me with what I want
+- I think you cant help me
+- hm i don't think you can do what i want
+- stop
+- stop go back
+- do you get anything?
+- and you call yourself bot company? pff
+- and that's it?
+- nothing else?
 
 ## intent:goodbye
 - bye
 - goodbye
 - see you around
 - see you later
-
-## intent:affirm
-- yes
-- indeed
-- of course
-- that sounds good
-- correct
-
-## intent:deny
-- no
-- never 
-- I don't think so
-- don't like that
-- no way
-- not really
-
-## intent:mood_great
-- perfect
-- very good
-- great
-- amazing
-- wonderful
-- I am feeling very good
-- I am great
-- I'm good
-
-## intent:mood_unhappy
-- sad
-- very sad
-- unhappy
-- bad
-- very bad
-- awful
-- terrible
-- not very good
-- extremely sad
-- so sad
-
-## intent:bot_challenge
-- are you a bot?
-- are you a human?
-- am I talking to a bot?
-- am I talking to a human?

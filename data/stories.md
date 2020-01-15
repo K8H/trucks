@@ -1,9 +1,13 @@
 
-## greeting
+## happy_path
 * greet
   - utter_greet
   - utter_company
-* company
-  - action_fleet_size
-* fleet_size
-  - action_truck_ids
+* response_company
+    - truck_form
+    - form{"name": "truck_form"}
+    - form{"name": null}
+    - utter_slots_values
+* thankyou
+    - utter_noworries
+      
