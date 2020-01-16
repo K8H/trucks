@@ -10,7 +10,7 @@
     - form{"name": null}
     - utter_slots_values
 * deny
-    - utter_goodbye
+    - action_goodbye
     
 ## happy_path_more_trucks
 * greet
@@ -28,3 +28,5 @@
     - form{"name": "truck_form"}
     - form{"name": null}
     - utter_slots_values
+* deny
+    - action_goodbye

@@ -47,13 +47,13 @@ slots:
 actions:
   - action_company
   - action_slot_reset
+  - action_goodbye
   - utter_company
   - utter_slots_values
   - utter_chitchat
   - utter_ask_continue
   - utter_greet
   - utter_iamabot
-  - utter_goodbye
 
 forms:
   - truck_form
@@ -114,9 +114,6 @@ templates:
 
   utter_happy:
   - text: "Great! Let's move on"
-
-  utter_goodbye:
-  - text: "Thank you for your input. Your entry is stored in a csv file. Have a nice day and goodbye."
 
   utter_company:
   - text: "What's the name of the company you represent?"

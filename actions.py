@@ -10,7 +10,8 @@ from rasa_sdk.forms import FormAction
 
 from src import common
 
-log_file = None
+log_file_path = None
+log_file_name = None
 
 
 class ActionSlotReset(Action):
@@ -19,6 +20,17 @@ class ActionSlotReset(Action):
 
     def run(self, dispatcher, tracker, domain):
         return[AllSlotsReset()]
+
+
+class ActionGoodbye(Action):
+    def name(self):
+        return 'action_goodbye'
+
+    def run(self, dispatcher, tracker, domain):
+        global log_file_path
+        common.parse_event_history(log_file_name, tracker.events_after_latest_restart())
+        dispatcher.utter_message(text="Thank you for your input. Your entry is stored in a csv file. Have a nice day and goodbye.")
+        return[]
 
 
 class ActionCompany(Action):
@@ -30,10 +42,12 @@ class ActionCompany(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
-        global log_file
-        log_file = os.path.join(common.log_path(), tracker.latest_message['text'] + '_' + str(uuid.uuid4()))
+        global log_file_path
+        global log_file_name
+        log_file_name = tracker.latest_message['text'] + '_' + str(uuid.uuid4())
+        log_file_path = os.path.join(common.log_path(), log_file_name)
 
-        with open(log_file, 'w', newline='') as f:
+        with open(log_file_path, 'w', newline='') as f:
             writer = csv.writer(f)
             writer.writerow(list(common.truck_specs_dict().keys()))
 
@@ -94,9 +108,9 @@ class TruckForm(FormAction):
             domain: Dict[Text, Any],
     ) -> List[Dict]:
         """Print the added truck"""
-        global log_file
+        global log_file_path
 
-        with open(log_file, 'a', newline='') as f:
+        with open(log_file_path, 'a', newline='') as f:
             writer = csv.writer(f)
             writer.writerow(common.order_dict(tracker.slots))
 

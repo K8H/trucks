@@ -28,19 +28,29 @@ def order_dict(client_input_dict):
     return ordered_dict_values
 
 
+def parse_event_history(log_file, history_dict):
+    logger = Logger(log_file_name=log_file, log_mode='a')
+    for event in history_dict:
+        if event['event'] == 'user':
+            logger.log_message('user', event['text'])
+        elif event['event'] == 'bot':
+            logger.log_message('bot', event['text'])
+
+
 class Logger(object):
     def __init__(self, log_file_name, log_level=logging.INFO, log_mode='w'):
-        assure_path_exists(os.path.join(project_root(), 'logs'))
+        assure_path_exists(log_path())
         self.logger = logging.getLogger(log_file_name)
-        log_handler = logging.FileHandler(os.path.join(project_root(), 'logs/%s.log' % log_file_name), mode=log_mode)
+        log_handler = logging.FileHandler(os.path.join(log_path(), '%s.log' % log_file_name), mode=log_mode)
         formatter = logging.Formatter('%(asctime)s  %(message)s')
         log_handler.setFormatter(formatter)
         self.logger.addHandler(log_handler)
         self.logger.setLevel(log_level)
 
-    def log_message(self, msg):
+    def log_message(self, conversationalist, msg):
         """Ensure message format consistency.
 
+        :param conversationalist: who issued a message. TRACKS for chatbot or client name.
         :param msg: string
         """
-        self.logger.info('%s' % (msg))
+        self.logger.info('%6s  %s' % (conversationalist, msg))
