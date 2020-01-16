@@ -24,7 +24,10 @@ install rasa with
 
 3. Test the assistant by running:
     ```
-    rasa run actions&
+    rasa run actions
     rasa shell -m models --endpoints endpoints.yml
     ```
     This will load the assistant in your command line for you to chat.
+    
+    To start the conversation just go with hi, hey or any other greeting
+    you like.

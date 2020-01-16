@@ -8,7 +8,7 @@ from rasa_sdk.events import AllSlotsReset
 from rasa_sdk.executor import CollectingDispatcher
 from rasa_sdk.forms import FormAction
 
-from src import common
+import common
 
 log_file_path = None
 log_file_name = None
@@ -34,17 +34,39 @@ class ActionGoodbye(Action):
         return[]
 
 
-class ActionCompany(Action):
+class CompanyForm(FormAction):
 
     def name(self) -> Text:
-        return "action_company"
+        return "company_form"
 
-    def run(self, dispatcher: CollectingDispatcher,
+    def slot_mappings(self) -> Dict[Text, Union[Dict, List[Dict]]]:
+        """A dictionary to map required slots to
+            - an extracted entity
+            - intent: value pairs
+            - a whole message
+            or a list of them, where a first match will be picked"""
+        return {
+            "company": [
+                self.from_entity(entity="company"),
+                self.from_text()
+            ]
+        }
+
+    @staticmethod
+    def required_slots(tracker: Tracker) -> List[Text]:
+        """A list of required slots that the form has to fill"""
+        return ["company"]
+
+    def submit(
+            self,
+            dispatcher: CollectingDispatcher,
             tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-
+            domain: Dict[Text, Any],
+    ) -> List[Dict]:
+        """Print the added truck"""
         global log_file_path
         global log_file_name
+
         company = tracker.get_slot('company')
         print(company)
         log_file_name = tracker.latest_message['text'] + '_' + str(uuid.uuid4())
@@ -80,7 +102,8 @@ class TruckForm(FormAction):
                 self.from_text()
             ],
             "brand": [
-                self.from_entity(entity="brand", intent="inform")
+                self.from_entity(entity="brand", intent="inform"),
+                self.from_text()
             ],
             "model": [
                 self.from_entity(entity="model"),

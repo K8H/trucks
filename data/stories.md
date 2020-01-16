@@ -3,12 +3,13 @@
 * greet
   - utter_greet
   - utter_company
-* response_company
-    - action_company
-    - truck_form
-    - form{"name": "truck_form"}
-    - form{"name": null}
-    - utter_slots_values
+  - company_form
+  - form{"name": "company_form"}
+  - form{"name": null}
+  - truck_form
+  - form{"name": "truck_form"}
+  - form{"name": null}
+  - utter_slots_values
 > check_asked_question
     
 ## user_denies

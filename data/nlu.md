@@ -28,13 +28,6 @@
 - hey bot!
 - hello friend
 
-## intent:response_company
-- a company
-- company 1
-- some company
-- co & co
-- a comp
-
 ## intent:brand
 - brand [MAN](brand)
 - brand: [man](brand)

@@ -2,7 +2,7 @@ import os
 import unittest
 import uuid
 
-from src import common
+import common
 
 
 class MyTestCase(unittest.TestCase):

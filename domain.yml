@@ -2,7 +2,6 @@ intents:
   - request_truck:
       use_entities: []
   - greet
-  - response_company
   - brand
   - thankyou
   - goodbye
@@ -11,8 +10,12 @@ intents:
 
 entities:
   - brand
+  - company
 
 slots:
+  company:
+    type: unfeaturized
+    auto_fill: false
   truck_id:
     type: unfeaturized
     auto_fill: false
@@ -44,6 +47,7 @@ actions:
   - utter_greet
 
 forms:
+  - company_form
   - truck_form
 
 templates:
@@ -96,6 +100,9 @@ templates:
 
   utter_company:
   - text: "What's the name of the company you represent?"
+
+  utter_greet:
+    - text: "Hey!"
 
 
 session_config:
