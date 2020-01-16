@@ -9,24 +9,19 @@
     - form{"name": "truck_form"}
     - form{"name": null}
     - utter_slots_values
+> check_asked_question
+    
+## user_denies
+> check_asked_question
 * deny
     - action_goodbye
     
-## happy_path_more_trucks
-* greet
-  - utter_greet
-  - utter_company
-* response_company
-    - action_company
-    - truck_form
-    - form{"name": "truck_form"}
-    - form{"name": null}
-    - utter_slots_values
+## user_affirms
+> check_asked_question
 * affirm
     - action_slot_reset
     - truck_form
     - form{"name": "truck_form"}
     - form{"name": null}
     - utter_slots_values
-* deny
-    - action_goodbye
+> check_asked_question
