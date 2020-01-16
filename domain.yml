@@ -45,13 +45,17 @@ slots:
     auto_fill: false
 
 actions:
+  - action_company
+  - action_slot_reset
   - utter_company
   - utter_slots_values
-  - utter_noworries
   - utter_chitchat
   - utter_ask_continue
   - utter_greet
   - utter_iamabot
+  - utter_another_truck
+  - utter_thankyou
+  - utter_goodbye
 
 forms:
   - truck_form
@@ -103,6 +107,9 @@ templates:
                - weight: {weight}\n
                - max_load: {max_load}\n"
 
+  utter_another_truck:
+    "Do you want to add another truck?"
+
   utter_greet:
   - text: "Hey!"
 
@@ -113,13 +120,13 @@ templates:
   - text: "Great! Let's move on"
 
   utter_goodbye:
-  - text: "Bye"
+  - text: "Have a nice day and goodbye."
 
   utter_company:
   - text: "What's the name of the company you represent?"
 
-  utter_noworries:
-    - text:
+  utter_thankyou:
+  - text: "Great. Your entry will be saved as log file."
 
 session_config:
   session_expiration_time: 60

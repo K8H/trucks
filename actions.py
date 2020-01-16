@@ -1,17 +1,47 @@
+import csv
+import os
 import uuid
 from typing import Dict, Text, Any, List, Union
 
-from rasa_sdk import Tracker
+from rasa_sdk import Tracker, Action
+from rasa_sdk.events import AllSlotsReset
 from rasa_sdk.executor import CollectingDispatcher
 from rasa_sdk.forms import FormAction
 
 from src import common
 
+log_file = None
+
+
+class ActionSlotReset(Action):
+    def name(self):
+        return 'action_slot_reset'
+
+    def run(self, dispatcher, tracker, domain):
+        return[AllSlotsReset()]
+
+
+class ActionCompany(Action):
+
+    def name(self) -> Text:
+        return "action_company"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        global log_file
+        log_file = os.path.join(common.log_path(), tracker.latest_message['text'] + '_' + str(uuid.uuid4()))
+
+        with open(log_file, 'w', newline='') as f:
+            writer = csv.writer(f)
+            writer.writerow(list(common.truck_specs_dict().keys()))
+
+        return []
+
 
 class TruckForm(FormAction):
     """Truck form action"""
-
-    logger = None
 
     def name(self) -> Text:
         return "truck_form"
@@ -19,7 +49,6 @@ class TruckForm(FormAction):
     @staticmethod
     def required_slots(tracker: Tracker) -> List[Text]:
         """A list of required slots that the form has to fill"""
-        print(tracker.latest_message['text'])
         return ["truck_id", "brand", "model", "engine_size", "axl_nr", "weight", "max_load"]
 
     def slot_mappings(self) -> Dict[Text, Union[Dict, List[Dict]]]:
@@ -28,7 +57,6 @@ class TruckForm(FormAction):
             - intent: value pairs
             - a whole message
             or a list of them, where a first match will be picked"""
-        print('Mapping slots')
         return {
             "truck_id": [
                 self.from_entity(entity="truck_id", intent=["inform", "request_truck"]),
@@ -59,115 +87,18 @@ class TruckForm(FormAction):
             ]
         }
 
-    # def run(self, dispatcher: CollectingDispatcher,
-    # TODO open log file only when eneter a company name
-    #         tracker: Tracker,
-    #         domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-    #     print('ActionCompany')
-    #     self.logger = common.Logger(log_file_name=tracker.latest_message['text'] + str(uuid.uuid4()), log_mode='a')
-    #     return []
-
-    @staticmethod
-    def brands_list() -> List[Text]:
-        """List of supported brands"""
-        return ["man", "scania", "iveco", "volvo", "daimler"]
-
-    @staticmethod
-    def is_int(string: Text) -> bool:
-        """Check if a string is an integer"""
-
-        try:
-            int(string)
-            return True
-        except ValueError:
-            return False
-
-    def validate_brand(
-        self,
-        value: Text,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
-    ) -> Dict[Text, Any]:
-        """Validate brand value."""
-
-        if value.lower() in self.brands_list():
-            # validation succeeded, set the value of the "cuisine" slot to value
-            return {"brand": value}
-        else:
-            dispatcher.utter_message(template="utter_wrong_brand")
-            # validation failed, set this slot to None and user will be asked for the slot again
-            return {"brand": None}
-
-    def validate_engine_size(
-        self,
-        value: Text,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
-    ) -> Dict[Text, Any]:
-        """Validate engine size value."""
-        if self.is_int(value) and 3000 < int(value) < 15000:
-            return {"engine_size": value}
-        else:
-            dispatcher.utter_message(template="utter_wrong_engine_size")
-            # validation failed, set slot to None
-            return {"engine_size": None}
-
-    def validate_axl_nr(
-        self,
-        value: Text,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
-    ) -> Dict[Text, Any]:
-        """Validate axl_nr value."""
-        if self.is_int(value) and 0 < int(value) < 6:
-            return {"axl_nr": value}
-        else:
-            dispatcher.utter_message(template="utter_wrong_axl_nr")
-            # validation failed, set slot to None
-            return {"axl_nr": None}
-
-    def validate_weight(
-        self,
-        value: Text,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
-    ) -> Dict[Text, Any]:
-        """Validate weight value."""
-        if self.is_int(value) and 5000 < int(value) < 33000:
-            return {"weight": value}
-        else:
-            dispatcher.utter_message(template="utter_wrong_weight")
-            # validation failed, set slot to None
-            return {"weight": None}
-
-    def validate_max_load(
-        self,
-        value: Text,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
-    ) -> Dict[Text, Any]:
-        """Validate max load value."""
-        if self.is_int(value) and 1000 < int(value) < 20000:
-            return {"max_load": value}
-        else:
-            dispatcher.utter_message(template="utter_wrong_max_load")
-            # validation failed, set slot to None
-            return {"max_load": None}
-
     def submit(
-        self,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
+            self,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any],
     ) -> List[Dict]:
-        """Print the added truck
-        TODO ask if want to add another truck"""
-        print('submit')
-        # utter submit template
+        """Print the added truck"""
+        global log_file
+
+        with open(log_file, 'a', newline='') as f:
+            writer = csv.writer(f)
+            writer.writerow(common.order_dict(tracker.slots))
+
         dispatcher.utter_message(template="utter_submit")
         return []

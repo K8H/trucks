@@ -1,5 +1,6 @@
 import os
 import logging
+from collections import OrderedDict
 
 
 def assure_path_exists(path):
@@ -12,6 +13,21 @@ def project_root():
     return os.path.dirname(os.path.abspath(os.path.join(__file__, os.pardir)))
 
 
+def log_path():
+    assure_path_exists(os.path.join(project_root(), 'logs'))
+    return os.path.join(project_root(), 'logs')
+
+
+def truck_specs_dict():
+    """Ordered dict of truck specifications"""
+    return OrderedDict(truck_id=None, brand=None, model=None, engine_size=None, axl_nr=None, weight=None, max_load=None)
+
+
+def order_dict(client_input_dict):
+    ordered_dict_values = [client_input_dict.get(param) for param, _ in truck_specs_dict().items()]
+    return ordered_dict_values
+
+
 class Logger(object):
     def __init__(self, log_file_name, log_level=logging.INFO, log_mode='w'):
         assure_path_exists(os.path.join(project_root(), 'logs'))
@@ -22,10 +38,9 @@ class Logger(object):
         self.logger.addHandler(log_handler)
         self.logger.setLevel(log_level)
 
-    def log_message(self, conversationalist, msg):
+    def log_message(self, msg):
         """Ensure message format consistency.
 
-        :param conversationalist: who issued a message. TRACKS for chatbot or client name.
         :param msg: string
         """
-        self.logger.info('%12s  %s' % (conversationalist, msg))
+        self.logger.info('%s' % (msg))

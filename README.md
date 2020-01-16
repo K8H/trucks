@@ -14,7 +14,7 @@ install rasa with
    $ pip3 install rasa
    ```
 
-## How to use this example?
+## How to use this code?
 
 1. Train a Rasa model inside track directory by running:
     ```
