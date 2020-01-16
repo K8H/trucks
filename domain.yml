@@ -3,23 +3,14 @@ intents:
       use_entities: []
   - greet
   - response_company
-  - inform
+  - brand
   - thankyou
   - goodbye
   - affirm
   - deny
-  - mood_great
-  - mood_unhappy
-  - bot_challenge
 
 entities:
-  - truck_id
   - brand
-  - model
-  - engine_size
-  - axl_nr
-  - weight
-  - max_load
 
 slots:
   truck_id:
@@ -50,10 +41,7 @@ actions:
   - action_goodbye
   - utter_company
   - utter_slots_values
-  - utter_chitchat
-  - utter_ask_continue
   - utter_greet
-  - utter_iamabot
 
 forms:
   - truck_form
@@ -81,7 +69,7 @@ templates:
     - text: "How many axles has the truck?"
 
   utter_wrong_axl_nr:
-    - text: "Number of axles should be in a range [1, 5]"
+    - text: "Number of axles should be in a range [1, 9]"
 
   utter_ask_weight:
     - text: "How much does the truck weight?"
@@ -101,19 +89,10 @@ templates:
                - brand: {brand}\n
                - model: {model}\n
                - engine_size: {engine_size}\n
-               - axl_nr: {axl_nr}
+               - axl_nr: {axl_nr}\n
                - weight: {weight}\n
                - max_load: {max_load}\n
              Do you want to add another truck?"
-
-  utter_greet:
-  - text: "Hey!"
-
-  utter_did_that_help:
-  - text: "Did that help you?"
-
-  utter_happy:
-  - text: "Great! Let's move on"
 
   utter_company:
   - text: "What's the name of the company you represent?"
