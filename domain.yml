@@ -53,7 +53,6 @@ actions:
   - utter_ask_continue
   - utter_greet
   - utter_iamabot
-  - utter_thankyou
   - utter_goodbye
 
 forms:
@@ -117,13 +116,11 @@ templates:
   - text: "Great! Let's move on"
 
   utter_goodbye:
-  - text: "Have a nice day and goodbye."
+  - text: "Thank you for your input. Your entry is stored in a csv file. Have a nice day and goodbye."
 
   utter_company:
   - text: "What's the name of the company you represent?"
 
-  utter_thankyou:
-  - text: "Great. Your entry will be saved as log file."
 
 session_config:
   session_expiration_time: 60

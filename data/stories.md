@@ -10,7 +10,6 @@
     - form{"name": null}
     - utter_slots_values
 * deny
-    - utter_thankyou
     - utter_goodbye
     
 ## happy_path_more_trucks
