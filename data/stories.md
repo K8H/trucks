@@ -9,7 +9,6 @@
     - form{"name": "truck_form"}
     - form{"name": null}
     - utter_slots_values
-    - utter_another_truck
 * deny
     - utter_thankyou
     - utter_goodbye
@@ -24,11 +23,9 @@
     - form{"name": "truck_form"}
     - form{"name": null}
     - utter_slots_values
-    - utter_another_truck
 * affirm
     - action_slot_reset
     - truck_form
     - form{"name": "truck_form"}
     - form{"name": null}
     - utter_slots_values
-    - utter_another_truck
