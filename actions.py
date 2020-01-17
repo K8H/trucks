@@ -4,7 +4,7 @@ import uuid
 from typing import Dict, Text, Any, List, Union
 
 from rasa_sdk import Tracker, Action
-from rasa_sdk.events import AllSlotsReset
+from rasa_sdk.events import AllSlotsReset, SlotSet, EventType
 from rasa_sdk.executor import CollectingDispatcher
 from rasa_sdk.forms import FormAction
 
@@ -19,7 +19,7 @@ class ActionSlotReset(Action):
         return 'action_slot_reset'
 
     def run(self, dispatcher, tracker, domain):
-        return[AllSlotsReset()]
+        return [AllSlotsReset()]
 
 
 class ActionGoodbye(Action):
@@ -31,7 +31,66 @@ class ActionGoodbye(Action):
         common.parse_event_history(log_file_name, tracker.events_after_latest_restart())
         dispatcher.utter_message(
             text="Thank you for your input. Your entry is stored in a csv file. Have a nice day and goodbye.")
-        return[]
+        return []
+
+
+class SlotCorrectForm(FormAction):
+
+    def name(self):
+        return 'slot_correct_form'
+
+    @staticmethod
+    def required_slots(tracker: "Tracker") -> List[Text]:
+        return ["correct_slot"]
+
+    def slot_mappings(self) -> Dict[Text, Union[Dict, List[Dict]]]:
+        """A dictionary to map required slots to
+            - an extracted entity
+            - intent: value pairs
+            - a whole message
+            or a list of them, where a first match will be picked"""
+        return {
+            "correct_slot": [
+                self.from_entity(entity="correct_slot"),
+                self.from_text()
+            ]
+        }
+
+    def validate_correct_slot(
+            self,
+            value: Text,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any],
+    ) -> Dict[Text, Any]:
+        """Validate engine size value."""
+        if value.lower() in self.slot_list():
+
+            return {"correct_slot": True, value: None}
+        else:
+            dispatcher.utter_message(template="utter_wrong_correct_slots")
+            # validation failed, set slot to None
+            return {"correct_slot": None}
+
+    def submit(self, dispatcher: "CollectingDispatcher", tracker: "Tracker", domain: Dict[Text, Any]) -> List[
+        EventType]:
+        self.delete_last_entry()
+        dispatcher.utter_message(template="utter_delete_entry")
+        return [SlotSet("correct_slot", None)]
+
+    @staticmethod
+    def slot_list() -> List[Text]:
+        """List of supported brands"""
+        return ["truck_id", "brand", "model", "engine_size", "axl_nr", "weight", "max_load"]
+
+    @staticmethod
+    def delete_last_entry():
+        global log_file_path
+        f = open(log_file_path, "r+")
+        lines = f.readlines()
+        lines.pop()
+        f = open(log_file_path, "w+")
+        f.writelines(lines)
 
 
 class CompanyForm(FormAction):
@@ -67,9 +126,7 @@ class CompanyForm(FormAction):
         global log_file_path
         global log_file_name
 
-        company = tracker.get_slot('company')
-        print(company)
-        log_file_name = tracker.latest_message['text'] + '_' + str(uuid.uuid4())
+        log_file_name = tracker.get_slot('company') + '_' + str(uuid.uuid4())
         log_file_path = os.path.join(common.log_path(), log_file_name)
 
         with open(log_file_path, 'w', newline='') as f:
@@ -128,6 +185,11 @@ class TruckForm(FormAction):
         }
 
     @staticmethod
+    def brands_list() -> List[Text]:
+        """List of supported brands"""
+        return ["man", "scania", "iveco", "volvo", "daimler"]
+
+    @staticmethod
     def is_int(string: Text) -> bool:
         """Check if a string is an integer"""
 
@@ -137,12 +199,27 @@ class TruckForm(FormAction):
         except ValueError:
             return False
 
+    def validate_brand(
+            self,
+            value: Text,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any],
+    ) -> Dict[Text, Any]:
+        """Validate brand value."""
+
+        if value.lower() in self.brands_list():
+            return {"brand": value}
+        else:
+            dispatcher.utter_message(template="utter_wrong_brand")
+            return {"brand": None}
+
     def validate_engine_size(
-        self,
-        value: Text,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
+            self,
+            value: Text,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any],
     ) -> Dict[Text, Any]:
         """Validate engine size value."""
         if self.is_int(value) and 2000 < int(value) < 15000:
@@ -153,11 +230,11 @@ class TruckForm(FormAction):
             return {"engine_size": None}
 
     def validate_axl_nr(
-        self,
-        value: Text,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
+            self,
+            value: Text,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any],
     ) -> Dict[Text, Any]:
         """Validate axl_nr value."""
         if self.is_int(value) and 0 < int(value) < 9:
@@ -168,11 +245,11 @@ class TruckForm(FormAction):
             return {"axl_nr": None}
 
     def validate_weight(
-        self,
-        value: Text,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
+            self,
+            value: Text,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any],
     ) -> Dict[Text, Any]:
         """Validate weight value."""
         if self.is_int(value) and 1000 < int(value) < 33000:
@@ -183,11 +260,11 @@ class TruckForm(FormAction):
             return {"weight": None}
 
     def validate_max_load(
-        self,
-        value: Text,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
+            self,
+            value: Text,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any],
     ) -> Dict[Text, Any]:
         """Validate max load value."""
         if self.is_int(value) and 1000 < int(value) < 20000:

@@ -28,23 +28,6 @@
 - hey bot!
 - hello friend
 
-## intent:brand
-- brand [MAN](brand)
-- brand: [man](brand)
-- brand is: [Man](brand)
-- [Scania](brand)
-- [scania](brand)
-- [SCANIA](brand)
-- [Iveco](brand)
-- [IVECO](brand)
-- [iveco](brand)
-- [Volvo](brand)
-- [VOLVO](brand)
-- [volvo](brand)
-- [Daimler](brand)
-- [DAIMLER](brand)
-- [daimler](brand)
-
 ## intent:affirm
 - correct
 - ye
