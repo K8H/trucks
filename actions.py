@@ -19,7 +19,7 @@ class ActionSlotReset(Action):
         return 'action_slot_reset'
 
     def run(self, dispatcher, tracker, domain):
-        return[AllSlotsReset()]
+        return [AllSlotsReset()]
 
 
 class ActionGoodbye(Action):
@@ -31,7 +31,7 @@ class ActionGoodbye(Action):
         common.parse_event_history(log_file_name, tracker.events_after_latest_restart())
         dispatcher.utter_message(
             text="Thank you for your input. Your entry is stored in a csv file. Have a nice day and goodbye.")
-        return[]
+        return []
 
 
 class CompanyForm(FormAction):
@@ -67,9 +67,7 @@ class CompanyForm(FormAction):
         global log_file_path
         global log_file_name
 
-        company = tracker.get_slot('company')
-        print(company)
-        log_file_name = tracker.latest_message['text'] + '_' + str(uuid.uuid4())
+        log_file_name = tracker.get_slot('company') + '_' + str(uuid.uuid4())
         log_file_path = os.path.join(common.log_path(), log_file_name)
 
         with open(log_file_path, 'w', newline='') as f:
@@ -128,6 +126,11 @@ class TruckForm(FormAction):
         }
 
     @staticmethod
+    def brands_list() -> List[Text]:
+        """List of supported brands"""
+        return ["man", "scania", "iveco", "volvo", "daimler"]
+
+    @staticmethod
     def is_int(string: Text) -> bool:
         """Check if a string is an integer"""
 
@@ -137,12 +140,27 @@ class TruckForm(FormAction):
         except ValueError:
             return False
 
+    def validate_brand(
+            self,
+            value: Text,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any],
+    ) -> Dict[Text, Any]:
+        """Validate brand value."""
+
+        if value.lower() in self.brands_list():
+            return {"brand": value}
+        else:
+            dispatcher.utter_message(template="utter_wrong_brand")
+            return {"brand": None}
+
     def validate_engine_size(
-        self,
-        value: Text,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
+            self,
+            value: Text,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any],
     ) -> Dict[Text, Any]:
         """Validate engine size value."""
         if self.is_int(value) and 2000 < int(value) < 15000:
@@ -153,11 +171,11 @@ class TruckForm(FormAction):
             return {"engine_size": None}
 
     def validate_axl_nr(
-        self,
-        value: Text,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
+            self,
+            value: Text,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any],
     ) -> Dict[Text, Any]:
         """Validate axl_nr value."""
         if self.is_int(value) and 0 < int(value) < 9:
@@ -168,11 +186,11 @@ class TruckForm(FormAction):
             return {"axl_nr": None}
 
     def validate_weight(
-        self,
-        value: Text,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
+            self,
+            value: Text,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any],
     ) -> Dict[Text, Any]:
         """Validate weight value."""
         if self.is_int(value) and 1000 < int(value) < 33000:
@@ -183,11 +201,11 @@ class TruckForm(FormAction):
             return {"weight": None}
 
     def validate_max_load(
-        self,
-        value: Text,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
+            self,
+            value: Text,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any],
     ) -> Dict[Text, Any]:
         """Validate max load value."""
         if self.is_int(value) and 1000 < int(value) < 20000:

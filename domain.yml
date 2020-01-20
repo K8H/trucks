@@ -2,15 +2,10 @@ intents:
   - request_truck:
       use_entities: []
   - greet
-  - brand
   - thankyou
   - goodbye
   - affirm
   - deny
-
-entities:
-  - brand
-  - company
 
 slots:
   company:

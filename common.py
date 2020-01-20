@@ -10,7 +10,7 @@ def assure_path_exists(path):
 
 
 def project_root():
-    return os.path.dirname(os.path.abspath(os.path.join(__file__, os.pardir)))
+    return os.path.dirname(os.path.abspath(__file__))
 
 
 def log_path():
