@@ -13,6 +13,11 @@ install rasa with
    ```
    $ pip3 install rasa
    ```
+   
+and library for fuzzy string matching:
+   ```
+   $ pip install fuzzywuzzy[speedup]
+   ```
 
 ## How to use this code?
 

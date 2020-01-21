@@ -1,6 +1,4 @@
 intents:
-  - request_truck:
-      use_entities: []
   - greet
   - thankyou
   - goodbye
@@ -32,9 +30,6 @@ slots:
   max_load:
     type: unfeaturized
     auto_fill: false
-  correct_slot:
-    type: unfeaturized
-    auto_fill: false
 
 actions:
   - action_company
@@ -42,12 +37,9 @@ actions:
   - action_goodbye
   - utter_company
   - utter_slots_values
-  - utter_correct_slots
   - utter_greet
-  - utter_another_input
 
 forms:
-  - slot_correct_form
   - company_form
   - truck_form
 
@@ -89,7 +81,7 @@ templates:
     - text: "Max load should be in a range [1000, 20000]"
 
   utter_slots_values:
-    - text: "The entry was added to a csv file:\n
+    - text: "I added to the record file a truck with specifications:\n
                - truck id: {truck_id}\n
                - brand: {brand}\n
                - model: {model}\n
@@ -97,20 +89,7 @@ templates:
                - axl_nr: {axl_nr}\n
                - weight: {weight}\n
                - max_load: {max_load}\n
-            Is the input correct?"
-
-  utter_delete_entry:
-    - text: "The last entry was deleted from the csv file."
-
-  utter_wrong_correct_slots:
-    - text: "Sorry I didn't understand that. Possible options: truck_id, brand, model, engine_size, axl_nr,
-    weight, max_load. Check spelling. "
-
-  utter_correct_slots:
-    - text: "Which slot you want to correct (one @ the time)?"
-
-  utter_another_input:
-    - text: "Do you want to add another truck?"
+             Do you want to add another truck?"
 
   utter_company:
   - text: "What's the name of the company you represent?"

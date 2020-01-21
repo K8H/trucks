@@ -3,6 +3,7 @@ import os
 import uuid
 from typing import Dict, Text, Any, List, Union
 
+from fuzzywuzzy import process
 from rasa_sdk import Tracker, Action
 from rasa_sdk.events import AllSlotsReset
 from rasa_sdk.executor import CollectingDispatcher
@@ -12,6 +13,7 @@ import common
 
 log_file_path = None
 log_file_name = None
+BRAND_SCORE_THRESHOLD = 45
 
 
 class ActionSlotReset(Action):
@@ -128,7 +130,7 @@ class TruckForm(FormAction):
     @staticmethod
     def brands_list() -> List[Text]:
         """List of supported brands"""
-        return ["man", "scania", "iveco", "volvo", "daimler"]
+        return ["man", "scania", "iveco", "volvo", "daimler", "daf"]
 
     @staticmethod
     def is_int(string: Text) -> bool:
@@ -152,8 +154,20 @@ class TruckForm(FormAction):
         if value.lower() in self.brands_list():
             return {"brand": value}
         else:
-            dispatcher.utter_message(template="utter_wrong_brand")
-            return {"brand": None}
+            (brand_1, score_1), (brand_2, score_2) = process.extract(value.lower(), self.brands_list(), limit=2)
+
+            if score_1 < BRAND_SCORE_THRESHOLD:
+                dispatcher.utter_message(template="utter_wrong_brand")
+                return {"brand": None}
+
+            if score_1 == score_2:
+                # if two entries get the same probability score ask which one's the correct
+                dispatcher.utter_message(
+                    text="Two brands match your input. Did you mean %s or %s?" % (brand_1, brand_2))
+                return {"brand": None}
+
+            else:
+                return {"brand": brand_1}
 
     def validate_engine_size(
             self,
